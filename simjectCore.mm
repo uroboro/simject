@@ -19,7 +19,7 @@ NSString *simjectGenerateDylibList(SBApplicationInfo *appInfo) {
 	for (NSString *plist in plists) {
 		// We'll want to deal with absolute paths, so append the filename to dylibDir
 		NSString *plistPath = [dylibDir stringByAppendingPathComponent:plist];
-		NSDictionary *filter = [NSDictionary dictionaryWithContentsOfFile:plist];
+		NSDictionary *filter = [NSDictionary dictionaryWithContentsOfFile:plistPath];
 		for (NSString *entry in filter[@"Filter"][@"Bundles"]) {
 			// Now, check if the selected app's bundle ID matches anything in the plist
 			// Also check if any of the bundle IDs in the plist start with com.apple.*
@@ -29,7 +29,7 @@ NSString *simjectGenerateDylibList(SBApplicationInfo *appInfo) {
 				// An improvement can be made here by checking if the bundle ID is an installed system app or not...
 				// Such a check could be possible by using the MobileInstallationLookup function from the MobileInstallationInstall private framework
 				// I had considered doing that, but for the sake of releasing this in a timely manner, chose not to
-				[dylibsToInject addObject:[[plist stringByDeletingPathExtension] stringByAppendingString:@".dylib"]];
+				[dylibsToInject addObject:[[plistPath stringByDeletingPathExtension] stringByAppendingString:@".dylib"]];
 			}
 		}
 	}
